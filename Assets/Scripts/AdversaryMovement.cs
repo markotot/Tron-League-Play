@@ -2,27 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class AdversaryMovement : MonoBehaviour
 {
     public GameObject trail;
     public LevelManager levelManager;
     public Vector3 spawnPoint;
     public Color trailColor;
+
     // Start is called before the first frame update
     void Start()
     {
         transform.position = spawnPoint;
         renderObjectColor(GetComponent<Renderer>(), trailColor);
-        updateLevelTrail(9 - (int)Mathf.Floor(transform.position.y), (int)Mathf.Floor(transform.position.x), TileType.Player1Head);
+        updateLevelTrail(9 - (int)Mathf.Floor(transform.position.y),  (int)Mathf.Floor(transform.position.x), TileType.Player2Head);
     }
 
     // Update is called once per frame
     void Update()
     {
-        handleKeyPress(KeyCode.S, 0f, -1f, 0f);
-        handleKeyPress(KeyCode.W, 0f, 1f, 0f);
-        handleKeyPress(KeyCode.A, -1f, 0f, 0f);
-        handleKeyPress(KeyCode.D, 1f, 0f, 0f);
+        handleKeyPress(KeyCode.DownArrow, 0f, -1f, 0f);
+        handleKeyPress(KeyCode.UpArrow, 0f, 1f, 0f);
+        handleKeyPress(KeyCode.LeftArrow, -1f, 0f, 0f);
+        handleKeyPress(KeyCode.RightArrow, 1f, 0f, 0f);
     }
 
     private void handleKeyPress(KeyCode keyPressed, float xModifier, float yModifier, float zModifier)
@@ -38,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
     {
         GameObject trailObject = Instantiate(trail, transform.position, Quaternion.identity);
         renderObjectColor(trailObject.GetComponent<Renderer>(), trailColor);
-        updateLevelTrail(9 - (int)Mathf.Floor(transform.position.y), (int)Mathf.Floor(transform.position.x), TileType.Player2Trail);
+        updateLevelTrail(9 - (int)Mathf.Floor(transform.position.y),  (int)Mathf.Floor(transform.position.x), TileType.Player2Trail);
     }
 
     private void updateLevelTrail(int x, int y, TileType tileType)

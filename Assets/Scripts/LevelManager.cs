@@ -6,15 +6,22 @@ public enum TileType : ushort
 {
     Empty = 0,
     Player1Head = 1,
-    Player1Trail = 10,
-    Player2Head = 2,
-    Player2Trail = 20
+    Player1Trail = 2,
+    Player2Head = 3,
+    Player2Trail = 4
 }
 
 public class LevelManager : MonoBehaviour
 {
     private TileType[,] level = new TileType[10, 10];
-
+    public TileType[,] Level
+    {
+        get => level;
+        set
+        {
+            level = value;
+        }
+    }
     public void updateLevelTrail(int x, int y, TileType tileType)
     {
         level[x,y] = tileType;

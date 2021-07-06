@@ -24,15 +24,13 @@ public class LevelManager : MonoBehaviour
     }
     public void updateLevelTrail(int x, int y, TileType tileType)
     {
-        level[x,y] = tileType;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
+        if (x >= 0  && x < 10 && y >= 0 && y < 10)
+        {
+            level[x, y] = tileType;
+        }
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))

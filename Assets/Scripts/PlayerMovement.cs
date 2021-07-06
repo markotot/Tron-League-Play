@@ -81,13 +81,16 @@ public class PlayerMovement : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        List<float> observations = new List<float>();
         for(int i = 0; i < 10; i++)
         {
             for(int j = 0; j < 10; j++)
             {
-                sensor.AddObservation((float)levelManager.Level[i, j]);
+                observations.Add((float)levelManager.Level[i, j]);
             }
         }
+
+        sensor.AddObservation(observations);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)

@@ -4,19 +4,20 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 using Unity.MLAgents.Actuators;
-
 public class PlayerMovement : Agent
 {
     public GameObject trail;
     public LevelManager levelManager;
     public Vector3 spawnPoint;
     public Color trailColor;
+    public Color headColor;
     public GameObject trails;
+    public PlayerMovement opponent;
     // Start is called before the first frame update
     void Start()
     {
         transform.position = spawnPoint;
-        renderObjectColor(GetComponent<Renderer>(), trailColor);
+        renderObjectColor(GetComponent<Renderer>(), headColor);
         updateLevelTrail(9 - (int)Mathf.Floor(transform.position.y), (int)Mathf.Floor(transform.position.x), TileType.Player1Head);
     }
 
@@ -64,14 +65,17 @@ public class PlayerMovement : Agent
 
     private void OnTriggerEnter(Collider other)
     {
-        AddReward(-1.0f);
+        SetReward(-1.0f);
+        opponent.SetReward(1.0f);
+        opponent.EndEpisode();
         EndEpisode();
     }
 
     // ML-Agents methods
     public override void OnEpisodeBegin()
     {
-        transform.position = spawnPoint;
+        
+        transform.position = new Vector3(Random.Range(0,9) + 0.5f, Random.Range(0,9) + 0.5f, 0f);
         levelManager.Level = new TileType[10, 10];
         updateLevelTrail(9 - (int)Mathf.Floor(transform.position.y), (int)Mathf.Floor(transform.position.x), TileType.Player1Head);
         int children = trails.transform.childCount;
@@ -81,6 +85,8 @@ public class PlayerMovement : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        sensor.AddObservation(transform.position);
+        /*
         List<float> observations = new List<float>();
         for(int i = 0; i < 10; i++)
         {
@@ -91,6 +97,7 @@ public class PlayerMovement : Agent
         }
 
         sensor.AddObservation(observations);
+        */
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -104,6 +111,5 @@ public class PlayerMovement : Agent
         if (actionBuffers.DiscreteActions[0] == 3)
             handleAgentAction(1f, 0f, 0f);
 
-        AddReward(0.1f);
     }
 }
